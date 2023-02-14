@@ -29,7 +29,6 @@ public class UserDaoHibernateImpl implements UserDao {
             transaction.commit();
             System.out.println("Created table in given database...");
         } catch (Exception e) {
-            transaction.rollback();
             e.printStackTrace();
         }
     }
@@ -44,7 +43,6 @@ public class UserDaoHibernateImpl implements UserDao {
             transaction.commit();
             System.out.println("Dropped  table in given database...");
         } catch (Exception e) {
-            transaction.rollback();
             e.printStackTrace();
         }
     }
@@ -82,14 +80,13 @@ public class UserDaoHibernateImpl implements UserDao {
     @Override
     public List<User> getAllUsers() {
         List < User > result = new ArrayList < > ();
-        Transaction transaction = null;
+        Transaction transaction;
         try (Session session = Util.getSession();) {
             transaction = session.beginTransaction();
             User user = new User();
             result.addAll(session.createQuery("FROM " + user.getClass().getSimpleName()).getResultList());
             transaction.commit();
         } catch (Exception e) {
-            transaction.rollback();
             e.printStackTrace();
         }
         return result;
