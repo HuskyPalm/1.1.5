@@ -83,8 +83,7 @@ public class UserDaoHibernateImpl implements UserDao {
         Transaction transaction;
         try (Session session = Util.getSession();) {
             transaction = session.beginTransaction();
-            User user = new User();
-            result.addAll(session.createQuery("FROM " + user.getClass().getSimpleName()).getResultList());
+            result.addAll(session.createQuery("FROM User" ).getResultList());
             transaction.commit();
         } catch (Exception e) {
             e.printStackTrace();
@@ -96,9 +95,8 @@ public class UserDaoHibernateImpl implements UserDao {
     public void cleanUsersTable() {
         Transaction transaction = null;
         try (Session session = Util.getSession();) {
-            User user = new User();
             transaction = session.beginTransaction();
-            session.createNativeQuery(CLEAR_USERS_TABLE_SQL + user.getClass().getSimpleName()).executeUpdate();
+            session.createNativeQuery("TRUNCATE TABLE User;").executeUpdate();
             transaction.commit();
             System.out.println("Cleared table in given database...");
         } catch (Exception e) {
