@@ -5,6 +5,7 @@ import jm.task.core.jdbc.util.Util;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import javax.management.Query;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +13,7 @@ import java.util.List;
 public class UserDaoHibernateImpl implements UserDao {
     private static final String CREATE_USERS_TABLE_SQL = "CREATE TABLE IF NOT EXISTS  %s ( id BIGINT not NULL AUTO_INCREMENT, name VARCHAR(255), lastName VARCHAR(255), age TINYINT, PRIMARY KEY ( id ))";
     private static final String DROP_USERS_TABLE_SQL = "drop table if exists ";
-    private static final String CLEAR_USERS_TABLE_SQL = "DELETE FROM ";
+    private static final String CLEAR_USERS_TABLE_SQL = "DELETE FROM User";
 
     public UserDaoHibernateImpl() {
 
@@ -96,7 +97,7 @@ public class UserDaoHibernateImpl implements UserDao {
         Transaction transaction = null;
         try (Session session = Util.getSession();) {
             transaction = session.beginTransaction();
-            session.createNativeQuery("TRUNCATE TABLE User;").executeUpdate();
+            session.createQuery(CLEAR_USERS_TABLE_SQL).executeUpdate();
             transaction.commit();
             System.out.println("Cleared table in given database...");
         } catch (Exception e) {
